@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+@theme {
+  --color-pokemon-fire: 255 120 80;
+  --color-pokemon-water: 80 160 255;
+  --color-pokemon-grass: 80 200 80;
+}
