@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
-import Footer from "../pages/Footer.jsx";
-import Header from "../pages/Header.jsx";
+
+import Footer from "./Footer.jsx";
+import Header from "./Header.jsx";
 import styles from "./Homepage.module.css";
+
+import PokemonGrid from "./PokemonGrid.jsx";
+import PokemonModal from "./PokemonModal.jsx";
 
 import useFavourites from "../hooks/useFavourites.js";
 
@@ -15,7 +19,7 @@ const heroSlides = [
   {
     id: 2,
     imageUrl: "/Hero-2.png",
-    title: "Unleash Mewtwo's power",
+    title: "Unleash Mewtwo’s power",
     subtitle: "Explore legendary stats, abilities, and battle potential.",
   },
   {
@@ -44,11 +48,12 @@ function Homepage() {
   const { favorites, favoritesCount, toggleFavorite, isFavorite } =
     useFavourites();
 
-  // Auto-advance carousel every 8 seconds
+  // Hero carousel auto-advance
   useEffect(() => {
-    const id = setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 4000);
+    const id = setInterval(
+      () => setActiveSlide((prev) => (prev + 1) % heroSlides.length),
+      4000
+    );
     return () => clearInterval(id);
   }, []);
 
@@ -114,42 +119,25 @@ function Homepage() {
             </div>
           </section>
 
-          {/* Grid header */}
-          <section className={styles.gridHeaderSection}>
-            <div className={styles.gridTitle}>
-              <h2>Pokémon</h2>
-              <p>Browse and filter Pokémon by type, search, and favorites.</p>
-            </div>
-            <div className={styles.gridToggles}>
-              <label className={styles.favoritesToggle}>
-                <input
-                  type="checkbox"
-                  checked={showFavoritesOnly}
-                  onChange={(e) => setShowFavoritesOnly(e.target.checked)}
-                />
-                <span>Show favorites only ({favoritesCount})</span>
-              </label>
-            </div>
-          </section>
+          {/* Grid + pagination */}
+          <PokemonGrid
+            search={search}
+            selectedType={selectedType}
+            showFavoritesOnly={showFavoritesOnly}
+            favoritesCount={favoritesCount}
+            isFavorite={isFavorite}
+            toggleFavorite={toggleFavorite}
+            onToggleShowFavorites={setShowFavoritesOnly}
+            onSelectPokemon={setSelectedPokemon}
+          />
 
-          {/* Grid skeleton (replace with real grid + React Query later) */}
-          <section className={styles.gridSection}>
-            <div className={styles.pokemonGrid}>
-              {Array.from({ length: 8 }).map((_, idx) => (
-                <div key={idx} className={styles.pokemonCardSkeleton} />
-              ))}
-            </div>
-
-            <div className={styles.paginationRow}>
-              <button className={styles.paginationButton} disabled>
-                Previous
-              </button>
-              <button className={styles.paginationButton}>Next</button>
-            </div>
-          </section>
-
-          {/* Detail modal (to be wired later) */}
-          {selectedPokemon && <dialog open>TODO: Detail modal</dialog>}
+          {/* Detail modal */}
+          {selectedPokemon && (
+            <PokemonModal
+              name={selectedPokemon}
+              onClose={() => setSelectedPokemon(null)}
+            />
+          )}
         </div>
       </main>
 
