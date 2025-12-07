@@ -1,16 +1,26 @@
+import styles from "./PokemonCard.module.css";
+import { HiHeart, HiOutlineHeart } from "react-icons/hi2";
 import { useDetails } from "../hooks/usePokemonList.js";
-import styles from "../pages/Homepage.module.css";
 
 function PokemonCard({ name, isFavorite, onToggleFavorite, onSelect }) {
   const { data, isLoading } = useDetails(name);
 
   const sprite = data?.sprites?.front_default;
   const types = data?.types ?? [];
+  const id = data?.id;
+
+  const primaryType = types[0]?.type?.name;
+
+  const hpStat = data?.stats?.find((s) => s.stat?.name === "hp");
+  const hp = hpStat?.base_stat;
 
   return (
     <div className={styles.pokemonCard} onClick={onSelect}>
       <div className={styles.pokemonCardHeader}>
-        <h3 className={styles.pokemonName}>{name}</h3>
+        <h3 className={styles.pokemonName}>
+          {id ? `${id.toString().padStart(3, "0")} ` : ""}
+          {name}
+        </h3>
         <button
           type="button"
           className={
@@ -21,7 +31,7 @@ function PokemonCard({ name, isFavorite, onToggleFavorite, onSelect }) {
             onToggleFavorite();
           }}
         >
-          {isFavorite ? "★" : "☆"}
+          {isFavorite ? <HiHeart /> : <HiOutlineHeart />}
         </button>
       </div>
 
@@ -40,10 +50,19 @@ function PokemonCard({ name, isFavorite, onToggleFavorite, onSelect }) {
             "Sprite"
           )}
         </div>
-        <div className={styles.pokemonTypesPlaceholder}>
-          {types.length > 0
-            ? types.map((t) => t.type.name).join(", ")
-            : "Types"}
+
+        <div className={styles.pokemonMetaRow}>
+          <span
+            className={`${styles.typeChip} ${
+              primaryType ? styles[`typeChip-${primaryType}`] || "" : ""
+            }`}
+          >
+            {types.length > 0
+              ? types.map((t) => t.type.name).join(", ")
+              : "Types"}
+          </span>
+
+          {hp && <span className={styles.hpChip}>HP {hp}</span>}
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import styles from "../pages/Homepage.module.css";
+import styles from "./PokemonModal.module.css";
 
 import { useDetails } from "../hooks/usePokemonList";
 
@@ -24,11 +24,6 @@ function PokemonModal({ name, onClose }) {
 
   if (!name) return null;
 
-  const sprite = data?.sprites?.front_default;
-  const types = data?.types ?? [];
-  const stats = data?.stats ?? [];
-  const abilities = data?.abilities ?? [];
-
   return (
     <dialog ref={dialogRef} className={styles.pokemonDialog}>
       <div className={styles.pokemonDialogContent}>
@@ -41,22 +36,25 @@ function PokemonModal({ name, onClose }) {
         </button>
 
         {isLoading && <p>Loading details…</p>}
-        {error && <p>Failed to load details.</p>}
+        {error && (
+          <div className={styles.emptyState}>
+            <p className={styles.emptyIcon}>⚠️</p>
+            <p className={styles.emptyText}>Failed to load details.</p>
+          </div>
+        )}
 
         {data && (
           <>
             <header className={styles.pokemonDialogHeader}>
-              {sprite && (
-                <img
-                  src={sprite}
-                  alt={name}
-                  className={styles.pokemonDialogSprite}
-                />
-              )}
+              <img
+                src={data.sprites?.front_default}
+                alt={name}
+                className={styles.pokemonDialogSprite}
+              />
               <div>
                 <h2 className={styles.pokemonDialogTitle}>{data.name}</h2>
                 <p className={styles.pokemonDialogTypes}>
-                  {types.map((t) => t.type.name).join(", ")}
+                  {data.types.map((t) => t.type.name).join(", ")}
                 </p>
               </div>
             </header>
@@ -64,7 +62,7 @@ function PokemonModal({ name, onClose }) {
             <section className={styles.pokemonDialogSection}>
               <h3>Stats</h3>
               <ul className={styles.pokemonDialogStats}>
-                {stats.map((s) => (
+                {data.stats.map((s) => (
                   <li key={s.stat.name}>
                     <span>{s.stat.name}</span>
                     <span>{s.base_stat}</span>
@@ -76,7 +74,7 @@ function PokemonModal({ name, onClose }) {
             <section className={styles.pokemonDialogSection}>
               <h3>Abilities</h3>
               <ul>
-                {abilities.map((a) => (
+                {data.abilities.map((a) => (
                   <li key={a.ability.name}>{a.ability.name}</li>
                 ))}
               </ul>

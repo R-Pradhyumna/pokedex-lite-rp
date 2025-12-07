@@ -38,6 +38,14 @@ const heroSlides = [
 
 const types = ["all", "fire", "water", "grass", "electric"];
 
+const typeLabels = {
+  all: "All types",
+  fire: "🔥 Fire",
+  water: "💧 Water",
+  grass: "🌿 Grass",
+  electric: "⚡ Electric",
+};
+
 function Homepage() {
   const [search, setSearch] = useState("");
   const [selectedType, setSelectedType] = useState("all");
@@ -45,8 +53,7 @@ function Homepage() {
   const [selectedPokemon, setSelectedPokemon] = useState(null);
   const [activeSlide, setActiveSlide] = useState(0);
 
-  const { favorites, favoritesCount, toggleFavorite, isFavorite } =
-    useFavourites();
+  const { favoritesCount, toggleFavorite, isFavorite } = useFavourites();
 
   // Hero carousel auto-advance
   useEffect(() => {
@@ -106,16 +113,30 @@ function Homepage() {
                   type="button"
                   className={
                     type === selectedType
-                      ? `${styles.typeChip} ${styles.typeChipActive}`
-                      : styles.typeChip
+                      ? `${styles.typeChip} ${styles.typeChipActive} ${
+                          styles[`typeChip-${type}`] || ""
+                        }`
+                      : `${styles.typeChip} ${styles[`typeChip-${type}`] || ""}`
                   }
                   onClick={() => setSelectedType(type)}
                 >
-                  {type === "all"
-                    ? "All types"
-                    : type[0].toUpperCase() + type.slice(1)}
+                  {typeLabels[type]}
                 </button>
               ))}
+              <button
+                type="button"
+                className={
+                  showFavoritesOnly
+                    ? `${styles.typeChip} ${styles.typeChipActive}`
+                    : styles.typeChip
+                }
+                onClick={() => setShowFavoritesOnly((prev) => !prev)}
+              >
+                {showFavoritesOnly
+                  ? "Showing favorites"
+                  : "Show favorites only"}{" "}
+                ({favoritesCount})
+              </button>
             </div>
           </section>
 

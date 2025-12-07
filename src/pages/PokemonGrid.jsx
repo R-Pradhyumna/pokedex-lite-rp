@@ -1,8 +1,9 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import PokemonCard from "./PokemonCard.jsx";
 
-import styles from "../pages/Homepage.module.css";
+import styles from "./PokemonGrid.module.css";
 
+import { HiArrowLeft, HiArrowRight } from "react-icons/hi";
 import { useList } from "../hooks/usePokemonList.js";
 
 function PokemonGrid({
@@ -17,50 +18,97 @@ function PokemonGrid({
 }) {
   const [page, setPage] = useState(1);
 
-  const { data, isLoading, error, isFetching } = useList({
+  const { data, error, isFetching } = useList({
     page,
     search,
     type: selectedType,
   });
 
-  const visiblePokemon = useMemo(() => {
-    const allResults = data?.results || [];
+  const allResults = data?.results || [];
 
-    return showFavoritesOnly
-      ? allResults.filter((p) => isFavorite(p.name))
-      : allResults;
-  }, [data?.results, showFavoritesOnly, isFavorite]);
-
+  const pageSize = 21;
   const isDefaultList = !search && selectedType === "all";
+  const paginationDisabled = showFavoritesOnly;
+  const totalCount = isDefaultList ? data?.count ?? 0 : 0;
+  const totalPages =
+    isDefaultList && totalCount ? Math.ceil(totalCount / pageSize) : page;
+
+  const filteredByFavorites = showFavoritesOnly
+    ? allResults.filter((p) => isFavorite(p.name))
+    : allResults;
+
+  const paginatedResults = showFavoritesOnly
+    ? filteredByFavorites
+    : filteredByFavorites;
+
+  const visiblePokemon = paginatedResults;
 
   return (
     <>
-      {/* Grid header */}
-      <section className={styles.gridHeaderSection}>
-        <div className={styles.gridTitle}>
-          <h2>Pokémon</h2>
-          <p>Browse and filter Pokémon by type, search, and favorites.</p>
-        </div>
-        <div className={styles.gridToggles}>
-          <label className={styles.favoritesToggle}>
-            <input
-              type="checkbox"
-              checked={showFavoritesOnly}
-              onChange={(e) => onToggleShowFavorites(e.target.checked)}
-            />
-            <span>Show favorites only ({favoritesCount})</span>
-          </label>
-        </div>
-      </section>
-
-      {/* Grid section */}
       <section className={styles.gridSection}>
-        {isLoading ? (
+        <div className={styles.paginationRowTop}>
+          <button
+            type="button"
+            className={styles.paginationButton}
+            disabled={paginationDisabled || page === 1}
+            onClick={() => setPage((p) => Math.max(1, p - 1))}
+          >
+            <span className={styles.paginationIcon}>
+              <HiArrowLeft />
+            </span>
+            <span>Previous</span>
+          </button>
+
+          {isDefaultList && !paginationDisabled && totalPages > 1 && (
+            <div className={styles.pageSelectWrapper}>
+              <span className={styles.pageSelectLabel}>Page</span>
+              <select
+                className={styles.pageSelect}
+                value={page}
+                onChange={(e) => setPage(Number(e.target.value))}
+              >
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (p) => (
+                    <option key={p} value={p}>
+                      {p}
+                    </option>
+                  )
+                )}
+              </select>
+              <span className={styles.pageSelectLabel}>of {totalPages}</span>
+            </div>
+          )}
+
+          <button
+            type="button"
+            className={styles.paginationButton}
+            disabled={paginationDisabled || (!data?.next && isDefaultList)}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            <span>Next</span>
+            <span className={styles.paginationIcon}>
+              <HiArrowRight />
+            </span>
+          </button>
+        </div>
+
+        {isFetching ? (
           <p>Loading..</p>
         ) : error ? (
           <p>Failed to load Pokémon: {error.message}</p>
         ) : visiblePokemon.length === 0 ? (
-          <p>No Pokémon found.</p>
+          <div className={styles.emptyState}>
+            <p className={styles.emptyIcon}>🔍</p>
+            <p className={styles.emptyText}>
+              {showFavoritesOnly
+                ? "No favorites yet! Tap the ❤️ on any Pokémon to save it."
+                : search
+                ? `No Pokémon named "${search}" found.`
+                : selectedType !== "all"
+                ? `No ${selectedType} Pokémon available.`
+                : "No Pokémon found."}
+            </p>
+          </div>
         ) : (
           <div className={styles.pokemonGrid}>
             {visiblePokemon.map((pokemon) => (
@@ -74,26 +122,6 @@ function PokemonGrid({
             ))}
           </div>
         )}
-
-        <div className={styles.paginationRow}>
-          <button
-            className={styles.paginationButton}
-            disabled={page === 1}
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-          >
-            Previous
-          </button>
-          <button
-            className={styles.paginationButton}
-            disabled={!data?.next && isDefaultList}
-            onClick={() => setPage((p) => p + 1)}
-          >
-            Next
-          </button>
-          {isFetching && !isLoading && (
-            <span className={styles.updatingBadge}>Updating…</span>
-          )}
-        </div>
       </section>
     </>
   );

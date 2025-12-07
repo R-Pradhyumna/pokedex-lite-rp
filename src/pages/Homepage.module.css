@@ -162,75 +162,103 @@
     border-color 150ms ease;
 }
 
-.pokemonCard {
-  /* Start similar to .pokemonCardSkeleton if that exists */
-  border-radius: 1.25rem;
-  padding: 0.85rem;
-  background: #f3f4f6;
+.typesSection {
+  margin-top: 0.75rem;
+}
+
+.typesRow {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 0.5rem;
+}
+
+.typeChip {
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #374151;
   cursor: pointer;
-  transition: transform 120ms ease, box-shadow 120ms ease;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease,
+    box-shadow 120ms ease;
 }
 
-.pokemonGrid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.1rem;
+.typeChip:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 1px rgba(147, 197, 253, 0.5);
 }
 
-.pokemonCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+.typeChipActive {
+  background: #2563eb;
+  border-color: #1d4ed8;
+  color: #f9fafb;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.65);
 }
 
-.pokemonCardHeader {
-  display: flex;
+.favoritesToggle {
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #374151;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-}
-
-.pokemonName {
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-transform: capitalize;
-  margin: 0;
-}
-
-.favoriteButton,
-.favoriteButtonActive {
-  border: none;
-  background: transparent;
+  gap: 0.4rem;
   cursor: pointer;
-  font-size: 1rem;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease,
+    box-shadow 120ms ease;
 }
 
-.favoriteButtonActive {
-  color: #f97316;
+.typeChip:hover,
+.favoritesToggle:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 1px rgba(147, 197, 253, 0.5);
 }
 
-.pokemonCardBody {
-  margin-top: 0.35rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+.typeChipActive {
+  background: #2563eb;
+  border-color: #1d4ed8;
+  color: #f9fafb;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.65);
 }
 
-.pokemonImagePlaceholder,
-.pokemonTypesPlaceholder {
-  font-size: 0.75rem;
-  color: #9ca3af;
+.favoritesToggle input {
+  width: 0.85rem;
+  height: 0.85rem;
+  accent-color: #2563eb;
 }
 
-@media (max-width: 960px) {
-  .pokemonGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+.typeChip-fire.typeChipActive {
+  background: #f97316;
+  border-color: #ea580c;
 }
 
-@media (max-width: 640px) {
-  .pokemonGrid {
-    grid-template-columns: minmax(0, 1fr);
-  }
+.typeChip-water.typeChipActive {
+  background: #0ea5e9;
+  border-color: #0284c7;
+}
+
+.typeChip-grass.typeChipActive {
+  background: #22c55e;
+  border-color: #16a34a;
+}
+
+.typeChip-electric.typeChipActive {
+  background: #facc15;
+  border-color: #eab308;
+}
+
+.typeChip-fire,
+.typeChip-water,
+.typeChip-grass,
+.typeChip-electric {
+  /* subtle tint even when inactive */
+  background: #f9fafb;
 }
