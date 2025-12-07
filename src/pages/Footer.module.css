@@ -109,3 +109,59 @@
   align-items: center;
   gap: 0.75rem;
 }
+
+@media (max-width: 768px) {
+  .inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+}
+
+/* Ensure inner uses flex columns */
+.inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+/* Mobile/tablet stacking */
+@media (max-width: 900px) {
+  .inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .inner {
+    align-items: center;
+    text-align: center;
+  }
+
+  .brandRow {
+    justify-content: center;
+  }
+
+  .description {
+    max-width: 22rem;
+  }
+
+  .techChips {
+    justify-content: center;
+    flex-wrap: wrap;
+    row-gap: 0.4rem;
+  }
+
+  .bottomRow {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .bottomRight {
+    justify-content: center;
+  }
+}

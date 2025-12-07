@@ -9,28 +9,39 @@ function PokemonModal({ name, onClose }) {
 
   // Open dialog when mounted
   useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    if (!dialog.open) dialog.showModal();
+    if (!dialogRef.current) return;
 
-    const handleCancel = (event) => {
-      event.preventDefault();
-      onClose();
+    const dialog = dialogRef.current;
+    dialog.showModal();
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
     };
 
-    dialog.addEventListener("cancel", handleCancel);
-    return () => dialog.removeEventListener("cancel", handleCancel);
+    dialog.addEventListener("keydown", handleKeyDown);
+    return () => {
+      dialog.removeEventListener("keydown", handleKeyDown);
+      if (dialog.open) dialog.close();
+    };
   }, [onClose]);
 
   if (!name) return null;
 
   return (
-    <dialog ref={dialogRef} className={styles.pokemonDialog}>
+    <dialog
+      ref={dialogRef}
+      className={styles.pokemonDialog}
+      aria-modal="true"
+      aria-labelledby="pokemon-dialog-title"
+    >
       <div className={styles.pokemonDialogContent}>
         <button
           type="button"
           className={styles.pokemonDialogClose}
           onClick={onClose}
+          aria-label="Close Pokémon details"
         >
           ✕
         </button>

@@ -17,6 +17,7 @@ function PokemonGrid({
   onSelectPokemon,
 }) {
   const [page, setPage] = useState(1);
+  const [pageInput, setPageInput] = useState("1");
 
   const { data, error, isFetching } = useList({
     page,
@@ -51,6 +52,7 @@ function PokemonGrid({
             type="button"
             className={styles.paginationButton}
             disabled={paginationDisabled || page === 1}
+            aria-label="Go to previous page"
             onClick={() => setPage((p) => Math.max(1, p - 1))}
           >
             <span className={styles.paginationIcon}>
@@ -62,19 +64,39 @@ function PokemonGrid({
           {isDefaultList && !paginationDisabled && totalPages > 1 && (
             <div className={styles.pageSelectWrapper}>
               <span className={styles.pageSelectLabel}>Page</span>
-              <select
-                className={styles.pageSelect}
-                value={page}
-                onChange={(e) => setPage(Number(e.target.value))}
-              >
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                  (p) => (
-                    <option key={p} value={p}>
-                      {p}
-                    </option>
-                  )
-                )}
-              </select>
+              <input
+                type="number"
+                className={styles.pageInput}
+                min={1}
+                max={totalPages}
+                value={pageInput}
+                aria-label="Current page number"
+                onChange={(e) => {
+                  const raw = e.target.value;
+                  setPageInput(raw);
+                  const val = Number(raw);
+                  if (!Number.isNaN(val) && val >= 1 && val <= totalPages) {
+                    setPage(val);
+                  }
+                }}
+                onBlur={(e) => {
+                  const raw = e.target.value;
+                  const val = Number(raw);
+
+                  if (!raw || Number.isNaN(val) || val < 1) {
+                    setPage(1);
+                    setPageInput("1");
+                  } else if (val > totalPages) {
+                    setPage(totalPages);
+                    setPageInput(String(totalPages));
+                  } else {
+                    // valid value, normalise
+                    setPage(val);
+                    setPageInput(String(val));
+                  }
+                }}
+              />
+
               <span className={styles.pageSelectLabel}>of {totalPages}</span>
             </div>
           )}
@@ -83,6 +105,7 @@ function PokemonGrid({
             type="button"
             className={styles.paginationButton}
             disabled={paginationDisabled || (!data?.next && isDefaultList)}
+            aria-label="Go to next page"
             onClick={() => setPage((p) => p + 1)}
           >
             <span>Next</span>

@@ -7,7 +7,7 @@ import Skeleton from "./ui/Skeleton.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ErrorBoundary
-      fallback={Skeleton}
+      fallback={<Skeleton />}
       onReset={() => window.location.replace("/")}
     >
       <App />

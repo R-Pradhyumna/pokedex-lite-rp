@@ -262,3 +262,25 @@
   /* subtle tint even when inactive */
   background: #f9fafb;
 }
+
+@media (max-width: 640px) {
+  .heroOverlay {
+    padding-inline: 1rem;
+    padding-block: 2.1rem;
+  }
+
+  .heroButtons {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .typesRow {
+    gap: 0.4rem;
+    padding-inline: 0.5rem;
+  }
+
+  .typeChip {
+    font-size: 0.8rem;
+    padding: 0.35rem 0.75rem;
+  }
+}
