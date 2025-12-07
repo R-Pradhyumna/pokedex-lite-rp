@@ -1,7 +1,17 @@
-@import "tailwindcss";
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
 
-@theme {
-  --color-pokemon-fire: 255 120 80;
-  --color-pokemon-water: 80 160 255;
-  --color-pokemon-grass: 80 200 80;
+.appRoot {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #f9fafb; /* light page bg */
+}
+
+.appMain {
+  flex: 1;
 }

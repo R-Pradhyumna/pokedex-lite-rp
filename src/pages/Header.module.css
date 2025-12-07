@@ -1,0 +1,156 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.35);
+}
+
+.inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logoBadge {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #facc15, #f97316);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 22px rgba(251, 191, 36, 0.4);
+}
+
+.logoEmoji {
+  font-size: 1.5rem;
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #0f172a;
+}
+
+.highlight {
+  color: #f97316;
+}
+
+.subtitle {
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.searchWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.searchLabel {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.searchInput {
+  min-width: 230px;
+  max-width: 280px;
+  height: 2.4rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  padding: 0 2.4rem 0 1rem;
+  font-size: 0.9rem;
+  outline: none;
+  color: #0f172a;
+  background: rgba(248, 250, 252, 0.9);
+  transition: border-color 140ms ease, box-shadow 140ms ease,
+    background 140ms ease;
+}
+
+.searchInput::placeholder {
+  color: #9ca3af;
+}
+
+.searchInput:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.4);
+  background: #ffffff;
+}
+
+.searchIcon {
+  position: relative;
+  margin-left: -2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.favorites {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(248, 250, 252, 0.9);
+  border: 1px solid rgba(248, 113, 113, 0.45);
+  color: #b91c1c;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.favCount {
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(248, 113, 113, 0.12);
+}
+
+@media (max-width: 640px) {
+  .inner {
+    padding-inline: 0.75rem;
+    gap: 1rem;
+  }
+
+  .subtitle {
+    display: none;
+  }
+
+  .searchWrapper {
+    flex: 1;
+    justify-content: flex-end;
+  }
+
+  .searchInput {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .favorites {
+    display: none;
+  }
+}
